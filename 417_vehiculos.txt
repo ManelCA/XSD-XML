@@ -1,0 +1,106 @@
+Elabora un documento XSD que permita validar el siguiente documento XML:
+
+<vehiculos>
+  <vehiculo>
+    <nombre>Count Zero</nombre>
+    <modelo>Series I, 80"</modelo>
+    <fabricacion>
+      <inicio>
+        <dia>21</dia>
+        <mes>07</mes>
+        <anyo>1949</anyo>
+      </inicio>
+      <fin>
+        <dia>09</dia>
+        <mes>08</mes>
+        <anyo>1949</anyo>
+      </fin>
+    </fabricacion>
+    <modificaciones>
+      <modificacion>Cambiar motor</modificacion>
+      <modificacion>Cambiar embrague</modificacion>
+      <modificacion>Cambio aceite</modificacion>
+    </modificaciones>
+  </vehiculo>
+</vehiculos>
+
+Algunas consideraciones:
+
+Los elementos <vehiculo>, <nombre> y <modificacion> deben aparecer mínimo una vez y el máximo no está limitado. El resto de los elementos deben aparecer 1 vez.
+Todos los elementos que aparecen en el documento XML son obligatorios y deben aparecer siempre en el mismo orden.
+El elemento <dia> consta siempre de 2 cifras. Los valores permitidos son números enteros entre 01 y 31.
+El elemento <mes> consta siempre de 2 cifras. Los valores permitidos son números enteros entre 01 y 12.
+El elemento <anyo> consta siempre de 4 cifras. Los valores permitidos son números enteros entre 1900 y 2099.
+
+XSD: 
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Definición del elemento vehiculos -->
+  <xs:element name="vehiculos">
+    <!-- Definición del tipo de complejo para vehiculos -->
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="vehiculo" minOccurs="1" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="nombre" type="xs:string"/>
+              <xs:element name="modelo" type="xs:string"/>
+              <xs:element name="fabricacion">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="inicio" minOccurs="1" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="dia" type="diaType"/>
+                          <xs:element name="mes" type="mesType"/>
+                          <xs:element name="anyo" type="anyoType"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="fin" minOccurs="1" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="dia" type="diaType"/>
+                          <xs:element name="mes" type="mesType"/>
+                          <xs:element name="anyo" type="anyoType"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="modificaciones" minOccurs="1" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="modificacion" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+
+  <xs:simpleType name="diaType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-3][0-9]"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="mesType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-1][0-9]"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="anyoType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[1-2][0-9]{3}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
