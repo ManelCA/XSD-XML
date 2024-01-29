@@ -7,10 +7,7 @@ El contenido del elemento <dispositivo> solo puede tomar dos valores: conectado 
 XSD: 
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
-  <!-- Definición del elemento dispositivo -->
   <xs:element name="dispositivo">
-    <!-- Restricción para permitir solo los valores 'conectado' u 'ocupado' -->
     <xs:simpleType>
       <xs:restriction base="xs:string">
         <xs:enumeration value="conectado"/>
